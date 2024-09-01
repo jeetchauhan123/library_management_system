@@ -20,6 +20,7 @@ class library:
             self.books_dict.update({str(Isbn):{'books_title':line.replace("\n",""),'lender_name':'','lend_date':'', 'status':'Available'}})
             Isbn += 1    
 
+    # Display Module
     def display_books(self):
         print("------------------------List of Books---------------------")
         print("Books Isbn","\t", "Title")
@@ -27,23 +28,25 @@ class library:
         for key, value in self.books_dict.items():
             print(key,"\t\t", value.get("books_title"), "- [", value.get("status"),"]")
 
-    def Issue_books(self):
+    # Borrow Module
+    def Borrow_books(self):
         books_Isbn = input("Enter Books Isbn : ")
         current_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if books_Isbn in self.books_dict.keys():
             if not self.books_dict[books_Isbn]['status'] == 'Available':
-                print(f"This book is already issued to {self.books_dict[books_Isbn]['lender_name']} on {self.books_dict[books_Isbn]['lend_date']}")
+                print(f"This book is already Borrowed by {self.books_dict[books_Isbn]['lender_name']} on {self.books_dict[books_Isbn]['lend_date']}")
                 return self.lend_books()
             elif self.books_dict[books_Isbn]['status'] == 'Available':
                 your_name = input("Enter Your Name : ")
                 self.books_dict[books_Isbn]['lender_name'] = your_name
                 self.books_dict[books_Isbn]['lend_date'] = current_date
-                self.books_dict[books_Isbn]['status']= 'Already Issued'
-                print("Book Issued Successfully !!!\n")
+                self.books_dict[books_Isbn]['status']= 'Already Borrowed'
+                print("Book Borrowed Successfully !!!\n")
         else:
             print("Book Isbn Not Found !!!")
-            return self.Issue_books()
+            return self.Borrow_books()
 
+    # Add Book Module
     def add_books(self):
         new_books = input("Enter Books Title : ")
         if new_books == "":
@@ -57,6 +60,7 @@ class library:
             self.books_dict.update({str(int(max(self.books_dict))+1):{'books_title':new_books,'lender_name':'','lend_date':'', 'status':'Available'}})
             print(f"The books '{new_books}' has been added successfully !!!")
 
+    # Book Return Module
     def return_books(self):
         books_Isbn = input("Enter Books Isbn : ")
         if books_Isbn in self.books_dict.keys():
@@ -74,7 +78,7 @@ class library:
 if __name__ == "__main__":
     try:
         mylms = library("list_of_books.txt", "Python's")
-        press_key_list = {"D": "Display Books", "I": "Issue Books", "A": "Add Books", "R": "Return Books", "Q": "Quit"}    
+        press_key_list = {"D": "Display Books", "B": "Borrow Books", "A": "Add Books", "R": "Return Books", "Q": "Quit"}    
         
         key_press = False
         while not (key_press == "q"):
@@ -82,9 +86,9 @@ if __name__ == "__main__":
             for key, value in press_key_list.items():
                 print("Press", key, "To", value)
             key_press = input("Press Key : ").lower()
-            if key_press == "i":
-                print("\nCurrent Selection : ISSUE BOOK\n")
-                mylms.Issue_books()
+            if key_press == "b":
+                print("\nCurrent Selection : Borrow BOOK\n")
+                mylms.Borrow_books()
                 
             elif key_press == "a":
                 print("\nCurrent Selection : ADD BOOK\n")
